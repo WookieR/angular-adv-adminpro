@@ -7,6 +7,7 @@ import { LoginForm } from '../interfaces/login-form.interface';
 import { tap, map, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { Usuario } from '../models/usuario.model';
 
 const base_url = environment.base_url;
 
@@ -17,6 +18,8 @@ declare const gapi: any;
 })
 export class UsuarioService {
 
+  public usuario: Usuario;
+
   public auth2:any;
 
   constructor( private http: HttpClient,
@@ -25,12 +28,33 @@ export class UsuarioService {
     this.googleInit();
   }
 
+  get token(): string{
+    return localStorage.getItem('token') || '';
+  }
+
+  get id(): string {
+    return this.usuario.id || '';
+  }
+
   crearUsuario ( formData: RegisterForm ){
     return this.http.post(`${base_url}/usuario`, formData).pipe(
       tap( (resp:any) => {
         localStorage.setItem('token', resp.token );
       })
     );
+  }
+
+  actualizarPerfil(data: { email: string, nombre: string, role: string}){
+    data = {
+      ...data,
+      role: this.usuario.role
+    };
+
+    return this.http.put(`${base_url}/usuario/${this.id}`, data, {
+      headers: {
+        'x-token': this.token
+      }
+    });
   }
 
   login ( formData: LoginForm ){
@@ -50,7 +74,7 @@ export class UsuarioService {
   }
 
   validarToken(): Observable<boolean>{
-    const token = localStorage.getItem('token') || '';
+    const token = this.token;
 
     return this.http.get(`${base_url}/login/renew`,
       {
@@ -58,10 +82,12 @@ export class UsuarioService {
           'x-token': token
         }
       }).pipe(
-        tap( (resp:any) => {
+        map( (resp:any) => {
+
+          const { nombre, email, google, img = '', role, id } = resp.usuario;
+
+          this.usuario = new Usuario(nombre, email, '', google, role, id, img);
           localStorage.setItem('token', resp.token );
-        }),
-        map( resp => {
           return true;
         }),
         catchError( err => of( false )
