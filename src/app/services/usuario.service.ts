@@ -8,6 +8,7 @@ import { tap, map, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
+import { CargarUsuario } from '../interfaces/cargar-usuario.interface';
 
 const base_url = environment.base_url;
 
@@ -36,6 +37,15 @@ export class UsuarioService {
     return this.usuario.id || '';
   }
 
+  get headers(){
+    return {
+      headers:
+      {
+         'x-token': this.token
+      }
+    };
+  }
+
   crearUsuario ( formData: RegisterForm ){
     return this.http.post(`${base_url}/usuario`, formData).pipe(
       tap( (resp:any) => {
@@ -50,11 +60,7 @@ export class UsuarioService {
       role: this.usuario.role
     };
 
-    return this.http.put(`${base_url}/usuario/${this.id}`, data, {
-      headers: {
-        'x-token': this.token
-      }
-    });
+    return this.http.put(`${base_url}/usuario/${this.id}`, data, this.headers);
   }
 
   login ( formData: LoginForm ){
@@ -116,5 +122,29 @@ export class UsuarioService {
         resolve();
       });
     });
+  }
+
+  cargarUsuarios(desde: number = 0){
+    const url = `${base_url}/usuario?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url, this.headers).pipe(
+      map( resp => {
+        const usuarios = resp.usuarios.map( user => new Usuario(user.nombre, user.email, '', user.google, user.role, user.id, user.img) );
+
+        return {
+          total: resp.total,
+          usuarios
+        }
+      })
+    )
+  }
+
+  eliminarUsuario(usuario: Usuario){
+    const url = `${base_url}/usuario/${usuario.id}`;
+    return this.http.delete(url, this.headers);
+  }
+
+  guardarUsuario(usuario: Usuario){
+
+    return this.http.put(`${base_url}/usuario/${usuario.id}`, usuario, this.headers);
   }
 }
