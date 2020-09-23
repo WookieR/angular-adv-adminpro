@@ -32,6 +32,10 @@
     width: 140px;
 }
 
+.w400 {
+    width: 400px;
+}
+
 .avatar {
     border: 1px solid;
     width: 30px;

@@ -6,6 +6,7 @@ import { AppRoutingModule } from '../app-routing.module';
 
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -16,6 +17,9 @@ import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
+import { HospitalComponent } from './mantenimientos/hospital/hospital.component';
+import { MedicoComponent } from './mantenimientos/medico/medico.component';
+import { MedicoEditarComponent } from './mantenimientos/medico/medico-editar/medico-editar.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +31,10 @@ import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
     PromesasComponent,
     RxjsComponent,
     PerfilComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    HospitalComponent,
+    MedicoComponent,
+    MedicoEditarComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +42,8 @@ import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
     AppRoutingModule,
     FormsModule,
     ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
   exports: [
     DashboardComponent,
@@ -46,7 +54,9 @@ import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
     PromesasComponent,
     RxjsComponent,
     PerfilComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    HospitalComponent,
+    MedicoComponent
   ]
 })
 export class PagesModule { }
