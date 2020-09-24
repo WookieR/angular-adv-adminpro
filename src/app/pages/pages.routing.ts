@@ -13,6 +13,8 @@ import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
 import { HospitalComponent } from './mantenimientos/hospital/hospital.component';
 import { MedicoComponent } from './mantenimientos/medico/medico.component';
 import { MedicoEditarComponent } from './mantenimientos/medico/medico-editar/medico-editar.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
+import { AdminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
     { path: 'dashboard', component: PagesComponent, canActivate: [AuthGuard], children: [
@@ -25,10 +27,13 @@ const routes: Routes = [
         { path: 'perfil',  component: PerfilComponent, data: { titulo: 'Perfil' } },
 
         // Mantenimientos
-        { path: 'usuarios',  component: UsuarioComponent, data: { titulo: 'Mantenimiento de usuarios' } },
+        { path: 'usuarios', canActivate: [AdminGuard],  component: UsuarioComponent, data: { titulo: 'Mantenimiento de usuarios' } },
         { path: 'hospitales',  component: HospitalComponent, data: { titulo: 'Mantenimiento de hospitales' } },
         { path: 'medicos',  component: MedicoComponent, data: { titulo: 'Mantenimiento de medicos' } },
-        { path: 'medicos/:id',  component: MedicoEditarComponent, data: { titulo: 'Mantenimiento de medicos' } }
+        { path: 'medicos/:id',  component: MedicoEditarComponent, data: { titulo: 'Mantenimiento de medicos' } },
+
+        // Busqueda
+        { path: 'busqueda/:termino',  component: BusquedaComponent, data: { titulo: 'Busqueda Global' } }
     ]}
 ];
 

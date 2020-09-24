@@ -20,6 +20,7 @@ import { UsuarioComponent } from './mantenimientos/usuario/usuario.component';
 import { HospitalComponent } from './mantenimientos/hospital/hospital.component';
 import { MedicoComponent } from './mantenimientos/medico/medico.component';
 import { MedicoEditarComponent } from './mantenimientos/medico/medico-editar/medico-editar.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MedicoEditarComponent } from './mantenimientos/medico/medico-editar/med
     UsuarioComponent,
     HospitalComponent,
     MedicoComponent,
-    MedicoEditarComponent
+    MedicoEditarComponent,
+    BusquedaComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +58,8 @@ import { MedicoEditarComponent } from './mantenimientos/medico/medico-editar/med
     PerfilComponent,
     UsuarioComponent,
     HospitalComponent,
-    MedicoComponent
+    MedicoComponent,
+    BusquedaComponent
   ]
 })
 export class PagesModule { }

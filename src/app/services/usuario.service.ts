@@ -37,6 +37,10 @@ export class UsuarioService {
     return this.usuario.id || '';
   }
 
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE' {
+    return this.usuario.role;
+  }
+
   get headers(){
     return {
       headers:
@@ -49,7 +53,9 @@ export class UsuarioService {
   crearUsuario ( formData: RegisterForm ){
     return this.http.post(`${base_url}/usuario`, formData).pipe(
       tap( (resp:any) => {
-        localStorage.setItem('token', resp.token );
+        // localStorage.setItem('token', resp.token );
+        // localStorage.setItem('menu', resp.menu );
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -66,7 +72,9 @@ export class UsuarioService {
   login ( formData: LoginForm ){
     return this.http.post(`${base_url}/login`, formData).pipe(
       tap( (resp:any) => {
-        localStorage.setItem('token', resp.token );
+        // localStorage.setItem('token', resp.token );
+        // localStorage.setItem('menu', resp.menu );
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -74,7 +82,9 @@ export class UsuarioService {
   loginGoogle ( token: string ){
     return this.http.post(`${base_url}/login/google`, {token}).pipe(
       tap( (resp:any) => {
-        localStorage.setItem('token', resp.token );
+        // localStorage.setItem('token', resp.token );
+        // localStorage.setItem('menu', resp.menu );
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -93,7 +103,9 @@ export class UsuarioService {
           const { nombre, email, google, img = '', role, id } = resp.usuario;
 
           this.usuario = new Usuario(nombre, email, '', google, role, id, img);
-          localStorage.setItem('token', resp.token );
+          // localStorage.setItem('token', resp.token );
+          // localStorage.setItem('menu', resp.menu );
+          this.guardarLocalStorage(resp.token, resp.menu);
           return true;
         }),
         catchError( err => of( false )
@@ -103,6 +115,9 @@ export class UsuarioService {
 
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
+    // Borrar Menu
+
     this.auth2.signOut().then( () => {
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
@@ -146,5 +161,10 @@ export class UsuarioService {
   guardarUsuario(usuario: Usuario){
 
     return this.http.put(`${base_url}/usuario/${usuario.id}`, usuario, this.headers);
+  }
+
+  guardarLocalStorage(token: string, menu: any){
+    localStorage.setItem('token', token );
+    localStorage.setItem('menu', JSON.stringify(menu) );
   }
 }
